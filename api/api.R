@@ -39,10 +39,14 @@ indicators <- function (group=NULL, members=NULL, id=NULL) {
 }
 
 
-analytics <- function (dx = NULL, ou = NULL) {
+analytics <- function (dx = NULL, ou = NULL, prediction = FALSE) {
   ou <- paste(ou, collapse = ";")
-  param <- list(dx = dx, ou = ou)
   
+  param <- list(dx = dx, ou = ou)
+  if (prediction)
+    param <- list(dx = ou, ou = dx)
+  
+
   response <- rPython::python.call("analytics_api", param)
   
   period <- sapply(response, "[[", 2)

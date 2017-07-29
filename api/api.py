@@ -42,8 +42,8 @@ def analytics_api(payload={}):
   ou = payload["ou"]
 
   params = {
-    "dimension": [ "dx:"+dx, "pe:LAST_12_MONTHS" ],
-    "filter": ["ou:"+ou],
+    "dimension": [ "ou:"+ou, "pe:LAST_12_MONTHS" ],
+    "filter": ["dx:"+dx],
     "skipMeta": "true",
     "displayProperty": "NAME"
   }
