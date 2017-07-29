@@ -1,9 +1,12 @@
 library(shinydashboard)
 
+source("api/parser.R")
+
 source("dashboard/index.R")
 source("dashboard/charts.R")
 source("dashboard/maps.R")
 source("dashboard/prediction.R")
+
 
 dashboardPage(
   skin = "green",
