@@ -16,7 +16,7 @@ chartsTab <- tabItem(
           selectInput(
             inputId = "dxGrp",
             width = "100%",
-            choices = indicators(group = "true")$name,
+            choices = parseIndicators()$name,
             label = "Choose Indicator Group"
           ), # end Select
           
