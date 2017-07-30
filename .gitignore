@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+
+# Dir used by shiny apps
+rsconnect
