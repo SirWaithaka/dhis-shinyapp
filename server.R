@@ -1,8 +1,9 @@
-library(shiny)
 library(DT)
-library(rPython)
+library(forecast)
+library(ggplot2)
+library(shiny)
+library(tseries)
 
-source("api/parser.R")
 
 indicator <- data.frame(id = character(), name = character(), stringsAsFactors = FALSE)
 units <- data.frame(id = character(), name = character(), code = character(), stringsAsFactors = FALSE)
@@ -47,15 +48,26 @@ shinyServer(function(input, output, session){
     if (is.null(ou)) return()
     
     # get ids of organisation units picked
-    id <- units$id[ou]
+    ou_id <- units$id[ou]
     # get id of indicators picked
     dx_id <- indicator$id[indicator$name == dx]
+    # bins
     
-    values <- parseAnalytics(dx = dx_id, ou = id)
+    values <- parseAnalytics(dx = dx_id, ou = ou_id)
+    
+    bins <- seq(min(values$dx), max(values$dx), length.out = input$bins +1)
 
     output$chartDisplay <- renderPlot({
-      ggplot2::ggplot(values, ggplot2::aes(x=period, y=dx)) +
-        ggplot2::geom_bar(stat = "identity", fill = "steelblue")
+      chartType <- input$graphType
+      
+      # if (chartType == "histo") {
+      #   ggplot2::ggplot(values, ggplot2::aes(x=period, y=dx, fill=..count..)) +
+      #     ggplot2::geom_histogram(breaks=bins) +
+      #     ggplot2::ggtitle(paste(dx, " | ", units$name[ou])) +
+      #     ggplot2::theme_light()
+      # }
+      
+      graphPlot(chartType, ou, values, dx, bins)
     })
     updateTextInput(session, "demo", value = values$dx)
   })  
@@ -101,13 +113,15 @@ shinyServer(function(input, output, session){
     values <- parseAnalytics(dx = dx_id, ou = ou_id)
     
     output$predictionDisplay <- renderPlot({
-      TS <- ts(values, start = c(2016,7), end = c(2017,6), frequency = 12)
-      fit <- forecast::auto.arima(TS[, "dx"], seasonal = FALSE)
+      TS <- ts(values, start = c(2016,7), end = c(2017,1), frequency = 12)
+      # fit <- forecast::auto.arima(TS[, "dx"], seasonal = TRUE)
+      fit <- arima(TS[, "dx"], order = c(0,0,3))
       fcast <- forecast::forecast(fit, h = 1 * 6)
       plot(fcast, main = paste("T Series: ", ou_name), xlab="period (months)", ylab="Indicator")
+      # ggplot2::ggplot(fcast, ggplot2::aes(x))
     })
     updateTextInput(session, "peDemo", value = values$dx)
-  })  
+  })
   
 })
 

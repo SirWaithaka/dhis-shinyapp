@@ -1,6 +1,7 @@
 library(shinydashboard)
 
 source("api/parser.R")
+source("api/plots.R")
 
 source("dashboard/index.R")
 source("dashboard/charts.R")
