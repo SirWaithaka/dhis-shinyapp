@@ -27,7 +27,21 @@ chartsTab <- tabItem(
             choices = "",
             
             label = "Choose Indicator"
-          )
+          ),
+         
+         radioButtons("graphType", "Graph Type:",
+            c("Bar" = "bar",
+              "Uniform" = "line",
+              "Histogram" = "histo",
+              "Scatter Plot" = "splot")
+         ), # End radio buttons
+         sliderInput(
+           inputId="bins",
+           label = "Set the number of bins",
+           min = 5,
+           max = 100,
+           value = 10
+         ) # End sliderInput
        ),
        
        tabPanel(
