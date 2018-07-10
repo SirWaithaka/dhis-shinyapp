@@ -5,7 +5,7 @@ url <- "https://play.dhis2.org"
 
 parseOrganisationUnits <- function(level = 2) {
 
-  path <- "/release1/api/organisationUnits"
+  path <- "/2.25/api/organisationUnits"
   
   query <- list(paging = "false", fields = "name", fields = "code", fields = "id", level = level)
   
@@ -47,7 +47,7 @@ parseIndicators <- function (id = NULL, group = TRUE) {
   ## function return a character vector
   ## Of ids under an Indicator Group  
   getIDs <- function (id) {
-    path <- paste("release1/api/indicatorGroups/", id, sep = "")
+    path <- paste("/2.25/api/indicatorGroups/", id, sep = "")
     
     # query = list(paging = "false", fields = "name", fields = "id")
     
@@ -70,7 +70,7 @@ parseIndicators <- function (id = NULL, group = TRUE) {
   ## to get the members of a group
   if (!is.null(id)) {
     
-    path <- "/release1/api/indicators/"
+    path <- "/2.25/api/indicators/"
     query <- list(fields = "name", fields = "id")
     
     ## Empty dataframe for indicators
@@ -94,7 +94,7 @@ parseIndicators <- function (id = NULL, group = TRUE) {
   
   ## check if :param {group} is TRUE
   if (group) {
-    path <- "/release1/api/indicatorGroups"
+    path <- "/2.25/api/indicatorGroups"
     query <- list(paging = "false", fields = "name", fields = "id")
     end <- httr::modify_url(url, path = path, query = query)
     
@@ -132,7 +132,7 @@ parseAnalytics <- function (dx = NULL, ou = NULL) {
   DX <- paste("dx:", dx, sep = "")
   PE <- paste("pe:", "LAST_12_MONTHS", sep = "")
   
-  path <- "/release1/api/analytics"
+  path <- "/2.25/api/analytics"
   
   dimension <- paste(OU, PE, sep = ",")
   filter <- DX
